@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#17181c" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="BLEND LAB" />
+    <style>
+:root{
+  --bg:#17181c;--panel:#212329;--panel2:#282b31;--panel3:#30333a;--line:#3b3e46;--text:#f1f2f4;--muted:#969ba4;
+  --orange:#f47b36;--blue:#60a9ff;--green:#69d18b;--red:#ef5b62;--cube-color:#9aa0a8;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;color-scheme:dark;
+}
+*{box-sizing:border-box}html,body,#app{width:100%;height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--text)}button,input{font:inherit}button{color:inherit}.shell{height:100%;display:flex;flex-direction:column;background:var(--bg)}
+.topbar{height:58px;flex:0 0 58px;display:flex;align-items:center;border-bottom:1px solid #2e3036;padding:0 14px 0 16px;gap:18px;background:#191a1e;position:relative;z-index:20}.brand{border:0;background:none;display:flex;align-items:center;gap:10px;padding:0;cursor:pointer;text-align:left;min-width:190px}.brand-mark{width:28px;height:28px;position:relative;display:block}.brand-mark i{position:absolute;width:13px;height:13px;border:2px solid var(--orange);transform:rotate(30deg) skew(-5deg)}.brand-mark i:nth-child(1){left:1px;top:8px}.brand-mark i:nth-child(2){left:9px;top:1px}.brand-mark i:nth-child(3){left:12px;top:13px}.brand b{display:block;font-size:13px;letter-spacing:.11em}.brand small{display:block;font-size:7px;letter-spacing:.14em;color:#777d86;margin-top:1px}.lesson-chip{display:flex;align-items:center;gap:10px;border-left:1px solid #34363c;padding-left:18px}.lesson-chip span{font-size:9px;letter-spacing:.12em;color:var(--orange);font-weight:800}.lesson-chip b{font-size:12px}.top-actions{margin-left:auto;display:flex;align-items:center;gap:10px}.mode-switch{border:1px solid #3c3f46;background:#24262c;border-radius:999px;height:30px;display:flex;align-items:center;padding:0 7px;gap:7px;font-size:9px;color:#9297a1;cursor:pointer}.mode-switch i{width:30px;height:16px;background:#3a3d44;border-radius:99px;position:relative}.mode-switch i:before{content:"";position:absolute;width:12px;height:12px;border-radius:50%;background:var(--orange);left:2px;top:2px;transition:.2s}.mode-switch.blender i:before{left:16px}.mode-switch.blender span:last-child,.mode-switch:not(.blender) span:first-child{color:#fff}.icon-btn{width:30px;height:30px;border-radius:50%;border:1px solid #3d4048;background:#25272c;cursor:pointer}
+.workspace{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 270px;grid-template-rows:minmax(0,1fr) 76px;position:relative}.viewport-panel{min-width:0;min-height:0;background:#202228;position:relative;border-right:1px solid #363941}.viewport-toolbar{height:34px;background:#25272d;border-bottom:1px solid #363941;display:flex;align-items:center;padding:0 8px;gap:5px}.mini{height:24px;padding:0 8px;border:0;border-radius:4px;background:transparent;font-size:10px;color:#b8bbc1}.mini.active{background:#363941;color:#fff}.mini.edit{background:var(--orange);color:#111}.divider{height:16px;width:1px;background:#444750;margin:0 4px}.view-badge{margin-left:auto;font-size:8px;color:#7f848d;display:flex;gap:5px;align-items:center}.dot{width:6px;height:6px;border-radius:50%;display:inline-block}.dot.x{background:var(--red)}.dot.y{background:var(--green)}.dot.z{background:var(--blue)}
+.scene-wrap{height:calc(100% - 34px);position:relative;overflow:hidden;touch-action:none;background:radial-gradient(circle at 50% 42%,#30333a 0,#25272d 35%,#202228 76%)}.scene-stage{position:absolute;inset:0;perspective:850px;overflow:hidden;touch-action:none;cursor:grab}.scene-stage.dragging{cursor:grabbing}.grid-plane{position:absolute;width:1100px;height:900px;left:50%;top:48%;transform:translate(-50%,-50%) perspective(800px) rotateX(66deg);transform-origin:center;background-image:linear-gradient(rgba(125,130,140,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(125,130,140,.16) 1px,transparent 1px),linear-gradient(rgba(125,130,140,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(125,130,140,.08) 1px,transparent 1px);background-size:80px 80px,80px 80px,16px 16px,16px 16px;mask-image:radial-gradient(ellipse,#000 25%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse,#000 25%,transparent 75%)}.origin-lines{position:absolute;inset:0;pointer-events:none}.origin-lines i{position:absolute;left:50%;top:50%;transform-origin:left center;opacity:.55}.origin-lines .red{width:70%;height:1px;background:#b24c50;transform:rotate(-13deg) translateX(-45%)}.origin-lines .green{width:70%;height:1px;background:#4c9b68;transform:rotate(26deg) translateX(-45%)}.object-shadow{position:absolute;left:50%;top:61%;width:110px;height:32px;margin-left:-55px;border-radius:50%;background:rgba(0,0,0,.34);filter:blur(12px);transition:filter .15s;pointer-events:none}.cube-holder{position:absolute;left:50%;top:49%;width:130px;height:130px;margin:-65px 0 0 -65px;transform-style:preserve-3d;transform-origin:center;will-change:transform}.cube{position:absolute;width:112px;height:112px;left:9px;top:9px;transform-style:preserve-3d;will-change:transform}.face{position:absolute;width:112px;height:112px;background:color-mix(in srgb,var(--cube-color),#fff 4%);border:1.4px solid rgba(17,18,20,.75);box-shadow:inset 0 0 0 1px rgba(255,255,255,.09);transition:background .2s}.face span{position:absolute;inset:8px;border:1px solid rgba(255,255,255,.025)}.front{transform:translateZ(56px)}.back{transform:rotateY(180deg) translateZ(56px);filter:brightness(.7)}.right{transform:rotateY(90deg) translateZ(56px);filter:brightness(.83)}.left{transform:rotateY(-90deg) translateZ(56px);filter:brightness(.68)}.top{transform:rotateX(90deg) translateZ(56px);filter:brightness(1.16)}.bottom{transform:rotateX(-90deg) translateZ(56px);filter:brightness(.58)}.gizmo{position:absolute;left:65px;top:65px;width:1px;height:1px;transform-style:preserve-3d;pointer-events:none}.gizmo i{position:absolute;height:3px;width:80px;border-radius:2px;transform-origin:left center}.gizmo .gx{background:var(--red);transform:rotate(3deg)}.gizmo .gy{background:var(--green);transform:rotate(-65deg)}.gizmo .gz{background:var(--blue);transform:rotate(90deg)}.gizmo i:after{content:"";position:absolute;right:-3px;top:-4px;border-left:9px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent}.gizmo .gx{color:var(--red)}.gizmo .gy{color:var(--green)}.gizmo .gz{color:var(--blue)}.gizmo[data-tool="select"]{opacity:0}.gizmo[data-tool="rotate"] i{border-radius:50%;background:transparent!important;border:2px solid currentColor;width:80px;height:80px;left:-40px;top:-40px}.gizmo[data-tool="scale"] i:after{border:0;width:9px;height:9px;background:currentColor;top:-3px}.axis-widget{position:absolute;right:18px;top:14px;width:54px;height:54px;z-index:4}.axis{position:absolute;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:8px;font-weight:800;color:#111}.axis.z{background:var(--blue);left:18px;top:0}.axis.y{background:var(--green);left:0;top:25px}.axis.x{background:var(--red);right:0;top:29px}.zoom-controls{position:absolute;right:16px;bottom:18px;display:flex;flex-direction:column;z-index:8;border:1px solid #444750;border-radius:8px;overflow:hidden}.zoom-controls button{width:32px;height:30px;border:0;border-bottom:1px solid #444750;background:#2b2e34;cursor:pointer}.zoom-controls button:last-child{border-bottom:0}.gesture-tip{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:rgba(23,24,28,.76);border:1px solid rgba(255,255,255,.09);backdrop-filter:blur(8px);border-radius:999px;padding:7px 12px;font-size:9px;color:#aeb2b9;z-index:5;white-space:nowrap}
+.tool-shelf{position:absolute;left:12px;top:48px;width:60px;background:#27292f;border:1px solid #3d4047;border-radius:8px;padding:5px;display:grid;gap:4px;z-index:10;box-shadow:0 10px 28px rgba(0,0,0,.28)}.tool{height:54px;border:0;border-radius:5px;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;cursor:pointer;color:#969ba4}.tool>span{font-size:19px;line-height:18px}.tool b{font-size:8px;margin-top:4px;font-weight:600}.tool small{position:absolute;right:4px;top:3px;font-size:7px;color:#6e737d}.tool.active{background:#40434b;color:#fff}.tool.active:before{content:"";position:absolute;left:-5px;height:27px;width:2px;background:var(--orange);border-radius:2px}.tool.is-target{outline:2px solid var(--orange);box-shadow:0 0 0 5px rgba(244,123,54,.18)}
+.side-panel{grid-column:2;grid-row:1;background:#202228;min-height:0;display:flex;flex-direction:column}.side-tabs{height:35px;display:flex;border-bottom:1px solid #393c44}.side-tab{flex:1;border:0;background:#26282e;color:#777c85;font-size:8px;letter-spacing:.02em;cursor:pointer}.side-tab.active{background:#30333a;color:#fff;border-bottom:2px solid var(--orange)}.side-content{display:none;flex:1;min-height:0;overflow:auto}.side-content.active{display:block}.outliner-head{height:36px;padding:0 11px;display:flex;align-items:center;justify-content:space-between;font-size:10px;color:#c7c9cd;border-bottom:1px solid #32343a}.tree-row{width:100%;height:34px;border:0;background:transparent;display:grid;grid-template-columns:16px 20px 1fr 20px;align-items:center;padding:0 9px;color:#b5b8bf;font-size:10px;text-align:left}.tree-row.active{background:#3c3f47}.tree-row.dim{opacity:.55}.tree-row em{font-style:normal;font-size:8px}.cube-icon,.cam-icon,.light-icon{width:12px;height:12px;border:1px solid #9297a0;transform:rotate(30deg);display:block}.cam-icon{transform:none;border-radius:2px}.light-icon{border-radius:50%;transform:none;background:#7b7f87}.panel-note{margin:16px 10px;padding:12px;border:1px solid #3a3d45;background:#25272d;border-radius:7px}.panel-note b{font-size:8px;color:var(--orange);letter-spacing:.12em}.panel-note p{font-size:10px;line-height:1.65;color:#8e939c;margin:6px 0 0}.prop-section{padding:14px 11px;border-bottom:1px solid #343740}.prop-section h4{font-size:9px;margin:0 0 12px;color:#c4c7cc}.prop-section label{display:grid;grid-template-columns:65px 1fr 1fr;gap:5px;align-items:center;font-size:8px;color:#8d929b;margin:6px 0}.prop-section label span{display:flex;align-items:center;gap:4px;font-size:7px}.prop-section input{width:100%;height:23px;background:#18191d;border:1px solid #393c43;border-radius:3px;color:#bfc2c8;padding:0 5px;font-size:8px}.swatches{display:flex;gap:7px}.swatches button{width:25px;height:25px;border-radius:50%;border:2px solid transparent;background:var(--c);cursor:pointer}.swatches button.active{border-color:#fff;box-shadow:0 0 0 2px var(--orange)}.lessons-scroll{padding:7px}.lesson-mini{width:100%;border:0;border-radius:6px;background:transparent;display:grid;grid-template-columns:29px 1fr 20px;align-items:center;text-align:left;padding:9px 7px;color:#9da1a9;cursor:pointer}.lesson-mini>span{font-size:8px;color:#6f747d}.lesson-mini b{font-size:10px;display:block;color:#b8bbc1}.lesson-mini small{font-size:7px;color:#666c75}.lesson-mini em{font-style:normal}.lesson-mini.active{background:#34373e}.lesson-mini.active>span,.lesson-mini.active em{color:var(--orange)}.lesson-mini.done em{color:var(--green)}
+.timeline{grid-column:1/3;grid-row:2;background:#1c1d21;border-top:1px solid #353840;display:grid;grid-template-columns:180px 1fr 58px;align-items:center;min-height:0;position:relative;z-index:12}.timeline-controls{display:flex;align-items:center;gap:4px;padding-left:12px}.timeline-controls button{height:30px;min-width:32px;border:1px solid #3a3d44;background:#27292f;border-radius:5px;font-size:10px;cursor:pointer}.timeline-controls .key-btn{margin-left:5px;color:#ffcb6e;width:62px}.timeline-controls .key-btn span{font-size:7px;color:#c1c4ca}.timeline-track{height:48px;position:relative;padding:19px 8px 0}.timeline-track input{width:100%;accent-color:var(--orange)}.ticks{position:absolute;left:8px;right:8px;top:3px;display:flex;justify-content:space-between;font-size:7px;color:#656a73}.key-dot{position:absolute;top:25px;width:8px;height:8px;background:#f0c45f;transform:rotate(45deg);opacity:0}.key-dot.active{opacity:1}.key-dot.k0{left:8px}.key-dot.k60{right:8px}.frame-readout{text-align:center;border-left:1px solid #353840}.frame-readout b{display:block;font-size:14px}.frame-readout small{font-size:7px;color:#70757e}
+.coach{position:absolute;left:88px;bottom:94px;width:min(440px,calc(100vw - 390px));background:rgba(22,23,27,.94);border:1px solid #494c54;border-radius:12px;z-index:30;padding:14px 15px 14px;box-shadow:0 18px 55px rgba(0,0,0,.42);backdrop-filter:blur(16px);transition:.2s}.coach.hidden{opacity:0;pointer-events:none;transform:translateY(8px)}.coach-progress{display:grid;grid-template-columns:70px 1fr 40px;align-items:center;gap:8px}.coach-progress span{font-size:8px;color:var(--orange);letter-spacing:.1em;font-weight:800}.coach-progress div{height:2px;background:#393c43}.coach-progress i{display:block;height:100%;background:var(--orange);transition:.25s}.coach-progress small{font-size:8px;color:#777c84;text-align:right}.coach-close{position:absolute;right:8px;top:28px;border:0;background:transparent;color:#777c84;font-size:18px;cursor:pointer}.coach-copy{padding:12px 0 8px}.coach-kicker{font-size:7px;color:#777c84;letter-spacing:.15em}.coach-copy h2{font-size:17px;margin:4px 28px 3px 0}.coach-copy p{font-size:10px;color:#a0a4ab;margin:0;line-height:1.55}.coach-next{height:34px;width:100%;border:0;border-radius:7px;background:#f0f1f2;color:#17181c;font-size:10px;font-weight:700;cursor:pointer}.is-target{outline:2px solid var(--orange)!important;outline-offset:-2px;animation:pulseTarget 1.3s infinite}@keyframes pulseTarget{50%{box-shadow:0 0 0 8px rgba(244,123,54,.12)}}
+.course-overlay{position:fixed;inset:0;z-index:60;background:#16171a;overflow:auto;transition:.25s}.course-overlay.hidden{opacity:0;pointer-events:none;transform:translateY(10px)}.course-page{max-width:1000px;margin:auto;padding:54px 34px 70px}.course-head{display:flex;justify-content:space-between;gap:20px}.course-head span,.mission-title span{font-size:9px;letter-spacing:.16em;color:var(--orange);font-weight:800}.course-head h1{font-size:38px;letter-spacing:-.04em;margin:8px 0}.course-head p{color:#8d929b;font-size:12px}.course-head button{width:38px;height:38px;border-radius:50%;border:1px solid #3d4047;background:#23252a;font-size:20px;cursor:pointer}.course-progress-card{margin:28px 0 34px;background:#202228;border:1px solid #34373e;border-radius:12px;padding:18px}.course-progress-card>div:first-child{display:flex;justify-content:space-between}.course-progress-card span{font-size:8px;color:#777d86;letter-spacing:.12em}.course-progress-card b{font-size:13px}.big-progress{height:4px;background:#35383f;margin-top:12px;border-radius:10px;overflow:hidden}.big-progress i{display:block;height:100%;width:0;background:var(--orange);transition:.3s}.lesson-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.lesson-card{min-height:178px;text-align:left;border:1px solid #34373e;border-radius:10px;background:#1e2025;padding:15px;color:#d5d7db;cursor:pointer;position:relative;overflow:hidden}.lesson-card:hover,.lesson-card.current{border-color:#5a5e68;background:#24262c}.lesson-card.current:before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--orange)}.lesson-card.done{border-color:#315a43}.lesson-top{display:flex;justify-content:space-between}.lesson-top span{font-size:9px;color:#70757e}.lesson-top em{font-style:normal;font-size:7px;color:#6e737c;border:1px solid #393c43;border-radius:99px;padding:3px 6px}.lesson-card.done .lesson-top em{color:var(--green)}.lesson-card h3{margin:24px 0 7px;font-size:16px}.lesson-card p{font-size:9px;color:#858a93;line-height:1.6;margin:0}.lesson-bottom{position:absolute;left:15px;right:15px;bottom:14px;display:flex;align-items:center;justify-content:space-between}.lesson-bottom i{width:22px;height:2px;background:#454851}.lesson-bottom b{font-size:8px;color:#b8bbc2}.mission-title{margin:44px 0 14px}.mission-title h2{font-size:23px;margin:6px 0}.mission-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.mission-card{min-height:160px;border:1px solid #34373e;border-radius:10px;background:#1e2025;text-align:left;padding:14px;position:relative;cursor:pointer}.mission-icon{width:38px;height:38px;border-radius:8px;background:#2c2f36;display:grid;place-items:center;font-size:18px}.mission-card em{position:absolute;right:12px;top:12px;font-size:6px;font-style:normal;color:#7b8089}.mission-card h3{font-size:13px;margin:15px 0 4px}.mission-card p{font-size:8px;color:#7f848c;line-height:1.5}.mission-card>b{position:absolute;bottom:12px;font-size:8px;color:var(--orange)}
+.mobile-nav{display:none}.toast{position:fixed;left:50%;top:75px;transform:translate(-50%,-10px);z-index:100;background:#f0f1f2;color:#191a1e;padding:8px 13px;border-radius:99px;font-size:9px;font-weight:700;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:900px){.workspace{grid-template-columns:minmax(0,1fr) 230px}.coach{width:min(410px,calc(100vw - 330px))}.lesson-grid{grid-template-columns:repeat(2,1fr)}.mission-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){
+  html,body,#app{height:100dvh}.topbar{height:52px;flex-basis:52px;padding:0 10px;gap:8px}.brand{min-width:0}.brand-mark{width:24px;height:24px}.brand>span:last-child small{display:none}.brand b{font-size:11px}.lesson-chip{border:0;margin-left:auto;padding:0}.lesson-chip span{font-size:7px}.lesson-chip b{display:none}.top-actions{margin-left:0}.mode-switch{width:46px;padding:0 5px;justify-content:center}.mode-switch:after{content:"初";font-size:7px;color:#bfc2c8}.mode-switch.blender:after{content:"B"}.mode-switch span{display:none}.mode-switch i{width:30px}.icon-btn{display:none}
+  .workspace{display:grid;grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) 70px;padding-bottom:57px}.viewport-panel{border:0}.viewport-toolbar{height:32px}.scene-wrap{height:calc(100% - 32px)}.side-panel{position:fixed;left:0;right:0;bottom:57px;height:44vh;z-index:50;border-top:1px solid #555962;transform:translateY(110%);transition:.28s;border-radius:16px 16px 0 0;box-shadow:0 -20px 45px rgba(0,0,0,.35)}.side-panel.mobile-open{transform:translateY(0)}.timeline{grid-column:1;grid-row:2;grid-template-columns:120px 1fr 46px;height:70px}.timeline-controls{padding-left:6px;gap:2px}.timeline-controls button{min-width:26px;height:28px}.timeline-controls .key-btn{width:45px;margin-left:1px}.timeline-controls .key-btn span{display:none}.frame-readout b{font-size:12px}
+  .tool-shelf{left:8px;right:8px;top:auto;bottom:8px;width:auto;height:58px;grid-template-columns:repeat(5,1fr);padding:4px;gap:3px;background:rgba(35,37,42,.92);backdrop-filter:blur(10px)}.tool{height:48px}.tool.active:before{left:50%;bottom:-4px;top:auto;height:2px;width:24px;transform:translateX(-50%)}.tool small{right:7px;top:4px}.zoom-controls{right:9px;bottom:74px}.zoom-controls button{width:30px;height:28px}.gesture-tip{bottom:72px;font-size:8px;max-width:70%;overflow:hidden;text-overflow:ellipsis}.axis-widget{right:12px;top:11px;transform:scale(.82);transform-origin:top right}.cube-holder{top:46%}.object-shadow{top:60%}
+  .coach{left:10px;right:10px;top:94px;bottom:auto;width:auto;padding:12px;border-radius:11px}.coach-copy h2{font-size:15px}.coach-copy p{font-size:9px}.coach-next{height:32px}.course-page{padding:34px 14px 80px}.course-head h1{font-size:27px}.course-head p{font-size:10px;line-height:1.55}.lesson-grid{grid-template-columns:1fr}.lesson-card{min-height:150px}.mission-grid{grid-template-columns:repeat(2,1fr)}.mission-card{min-height:145px}.mobile-nav{position:fixed;left:0;right:0;bottom:0;height:58px;background:#1b1c20;border-top:1px solid #34373d;display:grid;grid-template-columns:repeat(3,1fr);z-index:55;padding-bottom:env(safe-area-inset-bottom)}.mobile-nav button{border:0;background:transparent;color:#6f747d;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:7px;gap:3px}.mobile-nav button span{font-size:16px}.mobile-nav button.active{color:#fff}.mobile-nav button.active span{color:var(--orange)}
+}
+@media(max-width:390px){.mission-grid{grid-template-columns:1fr 1fr}.mission-card{padding:11px}.coach{top:90px;bottom:auto}.gesture-tip{display:none}}
+
+    </style>
+    <title>BLEND LAB — Blender仮想学習</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+const lessons = [
+  {
+    id: 'ui', n: '01', title: 'Blenderの画面', time: '3分',
+    desc: 'Viewport / Outliner / Properties / Timeline の役割を覚えます。',
+    steps: [
+      ['viewport', '中央の3D Viewportをタップ', 'ここがモデルを作るメイン画面です。'],
+      ['outliner', 'Outlinerの「Cube」をタップ', 'シーンにあるオブジェクト一覧です。'],
+      ['properties', 'Propertiesを開く', '位置・回転・大きさなどを確認できます。'],
+      ['timeline', '下のTimelineをタップ', 'アニメーションの時間を操作する場所です。']
+    ]
+  },
+  {
+    id: 'view', n: '02', title: '視点操作', time: '4分',
+    desc: '1本指ドラッグとピンチで3D空間を見る練習。',
+    steps: [
+      ['orbit', 'Viewportをドラッグ', '1本指ドラッグで視点を回します。'],
+      ['zoom', 'ピンチ、または＋/−でズーム', '作品を近く・遠くから確認できます。']
+    ]
+  },
+  {
+    id: 'transform', n: '03', title: 'オブジェクト操作', time: '6分',
+    desc: 'Move / Rotate / Scale を体で覚えます。',
+    steps: [
+      ['move', '「移動 / Move(G)」を選ぶ', 'BlenderのGキーにあたる操作です。'],
+      ['moveAction', 'Cubeをドラッグして移動', 'X/Y方向にオブジェクトを移動します。'],
+      ['rotate', '「回転 / Rotate(R)」を選ぶ', 'BlenderのRキーにあたる操作です。'],
+      ['rotateAction', 'Cubeをドラッグして回転', 'オブジェクト自体を回転させます。'],
+      ['scale', '「大きさ / Scale(S)」を選ぶ', 'BlenderのSキーにあたる操作です。'],
+      ['scaleAction', 'Cubeを上下ドラッグ', 'ドラッグ量に応じて拡大・縮小します。']
+    ]
+  },
+  {
+    id: 'model', n: '04', title: 'モデリング基礎', time: '7分',
+    desc: 'Edit ModeとExtrudeの考え方を疑似体験。',
+    steps: [
+      ['edit', 'Edit ModeをON', 'オブジェクト全体ではなく形状を編集するモードです。'],
+      ['extrude', '「押し出し / Extrude(E)」を選ぶ', '選択した面を伸ばして形を作ります。'],
+      ['extrudeAction', 'Cubeを上へドラッグ', '上面を押し出すイメージで形を伸ばします。']
+    ]
+  },
+  {
+    id: 'material', n: '05', title: 'マテリアル', time: '4分',
+    desc: '色と質感を変えて見た目を作ります。',
+    steps: [
+      ['material', 'Propertiesの色を変更', 'Materialはオブジェクトの見た目を決めます。']
+    ]
+  },
+  {
+    id: 'animation', n: '06', title: 'アニメーション', time: '8分',
+    desc: '0Fと60Fにキーフレームを打って動かします。',
+    steps: [
+      ['frame0', 'Timelineを0Fにする', '最初の状態を記録します。'],
+      ['key0', 'KEYを押す', '0Fの位置をキーフレームとして保存します。'],
+      ['frame60', 'Timelineを60Fにする', '次の状態を作る時間へ移動します。'],
+      ['move60', 'Cubeを移動させる', '60Fで別の位置にします。'],
+      ['key60', 'KEYを押す', '60Fの位置を保存します。'],
+      ['play', 'PLAYを押す', '2つのキーフレームの間が自動補間されます。']
+    ]
+  },
+  {
+    id: 'mission', n: '07', title: '練習ミッション', time: '自由',
+    desc: '覚えた操作を組み合わせる仕上げ課題。',
+    steps: [
+      ['mission', '好きなミッションを選ぶ', 'コップ → 机 → キャラ → アニメの順がおすすめです。']
+    ]
+  }
+];
+
+const missions = [
+  { icon:'◯', title:'コップ', desc:'ScaleとExtrudeの考え方', diff:'BEGINNER' },
+  { icon:'▦', title:'机', desc:'移動・複製・サイズ調整', diff:'BEGINNER' },
+  { icon:'☺', title:'簡単キャラ', desc:'パーツ配置と形の組み合わせ', diff:'BASIC' },
+  { icon:'▶', title:'動かしてみる', desc:'キーフレームで簡単アニメ', diff:'BASIC' }
+];
+
+const app = document.querySelector('#app');
+
+app.innerHTML = `
+<div class="shell">
+  <header class="topbar">
+    <button class="brand" data-action="home" aria-label="ホームへ">
+      <span class="brand-mark"><i></i><i></i><i></i></span>
+      <span><b>BLEND LAB</b><small>3D LEARNING SIMULATOR</small></span>
+    </button>
+    <div class="lesson-chip"><span id="lessonNumber">LESSON 01</span><b id="lessonTitle">Blenderの画面</b></div>
+    <div class="top-actions">
+      <button class="mode-switch" id="modeSwitch"><span>初心者</span><i></i><span>Blender</span></button>
+      <button class="icon-btn" id="helpBtn" title="ヘルプ">?</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="viewport-panel" id="viewportPanel" data-target="viewport">
+      <div class="viewport-toolbar">
+        <button class="mini active" id="objectModeBtn">Object Mode</button>
+        <span class="divider"></span>
+        <button class="mini" title="選択">⌁</button>
+        <button class="mini" title="ギズモ">⊹</button>
+        <div class="view-badge"><span class="dot x"></span>X <span class="dot y"></span>Y <span class="dot z"></span>Z</div>
+      </div>
+
+      <div class="scene-wrap" id="sceneWrap">
+        <div class="axis-widget"><span class="axis z">Z</span><span class="axis y">Y</span><span class="axis x">X</span></div>
+        <div class="scene-stage" id="sceneStage">
+          <div class="grid-plane"></div>
+          <div class="origin-lines"><i class="red"></i><i class="green"></i></div>
+          <div class="object-shadow" id="objectShadow"></div>
+          <div class="cube-holder" id="cubeHolder" data-target="cube">
+            <div class="cube" id="cube">
+              <div class="face front"><span></span></div>
+              <div class="face back"><span></span></div>
+              <div class="face right"><span></span></div>
+              <div class="face left"><span></span></div>
+              <div class="face top"><span></span></div>
+              <div class="face bottom"><span></span></div>
+            </div>
+            <div class="gizmo" id="gizmo">
+              <i class="gx"></i><i class="gy"></i><i class="gz"></i><b></b>
+            </div>
+          </div>
+        </div>
+
+        <div class="zoom-controls">
+          <button id="zoomIn">＋</button><button id="zoomOut">−</button><button id="resetView">⌂</button>
+        </div>
+
+        <div class="gesture-tip" id="gestureTip">1本指で視点を回す · 2本指でズーム</div>
+      </div>
+
+      <nav class="tool-shelf" id="toolShelf">
+        <button class="tool active" data-tool="select"><span>⌁</span><b data-beginner="選択" data-blender="Select">選択</b><small></small></button>
+        <button class="tool" data-tool="move" data-target="move"><span>↔</span><b data-beginner="移動" data-blender="Move">移動</b><small>G</small></button>
+        <button class="tool" data-tool="rotate" data-target="rotate"><span>↻</span><b data-beginner="回転" data-blender="Rotate">回転</b><small>R</small></button>
+        <button class="tool" data-tool="scale" data-target="scale"><span>⤢</span><b data-beginner="大きさ" data-blender="Scale">大きさ</b><small>S</small></button>
+        <button class="tool" data-tool="extrude" data-target="extrude"><span>⇧</span><b data-beginner="押し出し" data-blender="Extrude">押し出し</b><small>E</small></button>
+      </nav>
+    </section>
+
+    <aside class="side-panel" id="sidePanel">
+      <div class="side-tabs">
+        <button class="side-tab active" data-tab="outliner" data-target="outliner">Outliner</button>
+        <button class="side-tab" data-tab="properties" data-target="properties">Properties</button>
+        <button class="side-tab" data-tab="lessons">Lessons</button>
+      </div>
+      <div class="side-content active" id="outlinerTab">
+        <div class="outliner-head"><span>Collection</span><small>▾</small></div>
+        <button class="tree-row active" data-target="cube"><span>▽</span><i class="cube-icon"></i><b>Cube</b><em>◉</em></button>
+        <div class="tree-row dim"><span></span><i class="cam-icon"></i><b>Camera</b><em>◉</em></div>
+        <div class="tree-row dim"><span></span><i class="light-icon"></i><b>Light</b><em>◉</em></div>
+        <div class="panel-note"><b>OUTLINER</b><p>シーン内のオブジェクトを一覧で管理する場所。</p></div>
+      </div>
+      <div class="side-content" id="propertiesTab">
+        <div class="prop-section">
+          <h4>Transform</h4>
+          <label>Location <span>X <input id="px" type="number" step="0.1" value="0"></span><span>Y <input id="py" type="number" step="0.1" value="0"></span></label>
+          <label>Rotation <span>X <input id="rx" type="number" step="1" value="20"></span><span>Y <input id="ry" type="number" step="1" value="-35"></span></label>
+          <label>Scale <span><input id="sc" type="number" step="0.1" min="0.3" max="2.5" value="1"></span></label>
+        </div>
+        <div class="prop-section" data-target="material">
+          <h4>Material</h4>
+          <div class="swatches">
+            <button style="--c:#9aa0a8" data-color="#9aa0a8" class="active"></button>
+            <button style="--c:#f2794b" data-color="#f2794b"></button>
+            <button style="--c:#55a7ff" data-color="#55a7ff"></button>
+            <button style="--c:#6dcc8b" data-color="#6dcc8b"></button>
+            <button style="--c:#b58cff" data-color="#b58cff"></button>
+          </div>
+        </div>
+        <div class="panel-note"><b>PROPERTIES</b><p>位置・回転・サイズ・色など、選択中のオブジェクトを調整します。</p></div>
+      </div>
+      <div class="side-content lessons-scroll" id="lessonsTab"></div>
+    </aside>
+
+    <section class="timeline" id="timeline" data-target="timeline">
+      <div class="timeline-controls">
+        <button id="jumpStart">|◀</button><button id="playBtn" data-target="play">▶</button><button id="jumpEnd">▶|</button>
+        <button class="key-btn" id="keyBtn" data-target="key0">◆ <span>KEY</span></button>
+      </div>
+      <div class="timeline-track">
+        <div class="ticks"><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span><span>60</span></div>
+        <input id="frameSlider" type="range" min="0" max="60" value="0" />
+        <div class="key-dot k0" id="keyDot0"></div><div class="key-dot k60" id="keyDot60"></div>
+      </div>
+      <div class="frame-readout"><b id="frameReadout">0</b><small>FRAME</small></div>
+    </section>
+  </main>
+
+  <section class="coach" id="coach">
+    <div class="coach-progress"><span id="coachLesson">LESSON 01</span><div><i id="coachBar"></i></div><small id="coachCount">1 / 4</small></div>
+    <button class="coach-close" id="coachClose">×</button>
+    <div class="coach-copy">
+      <span class="coach-kicker">TRY IT</span>
+      <h2 id="coachTitle">中央の3D Viewportをタップ</h2>
+      <p id="coachText">ここがモデルを作るメイン画面です。</p>
+    </div>
+    <button class="coach-next" id="coachNext">できた / 次へ <span>→</span></button>
+  </section>
+
+  <div class="course-overlay hidden" id="courseOverlay">
+    <div class="course-page">
+      <div class="course-head"><div><span>LEARNING PATH</span><h1>Blenderを、触る前に覚える。</h1><p>スマホで基本操作を疑似体験。PCでは作品づくりに集中できます。</p></div><button id="courseClose">×</button></div>
+      <div class="course-progress-card"><div><span>YOUR PROGRESS</span><b id="totalProgress">0%</b></div><div class="big-progress"><i id="totalBar"></i></div></div>
+      <div class="lesson-grid" id="lessonGrid"></div>
+      <div class="mission-title"><span>PRACTICE MISSIONS</span><h2>仕上げミッション</h2></div>
+      <div class="mission-grid" id="missionGrid"></div>
+    </div>
+  </div>
+
+  <nav class="mobile-nav">
+    <button class="active" data-mobile="sim"><span>◫</span>練習</button>
+    <button data-mobile="lessons"><span>✓</span>コース</button>
+    <button data-mobile="props"><span>⌘</span>設定</button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+</div>`;
+
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+const lerp = (a,b,t) => a + (b-a)*t;
+
+const defaultState = {
+  mode: 'beginner', tool: 'select', lesson: 0, step: 0,
+  viewRotX: -12, viewRotY: 26, zoom: 1,
+  object: { x:0, y:0, rx:20, ry:-35, rz:0, scale:1, extrude:1, color:'#9aa0a8' },
+  frame: 0, keys: {}, completed: [], editMode: false
+};
+let state;
+try { state = { ...defaultState, ...JSON.parse(localStorage.getItem('blendLabState') || '{}') }; }
+catch { state = structuredClone(defaultState); }
+state.object = { ...defaultState.object, ...(state.object || {}) };
+state.keys = state.keys || {};
+state.completed = state.completed || [];
+
+const cubeHolder = $('#cubeHolder');
+const cube = $('#cube');
+const stage = $('#sceneStage');
+const coach = $('#coach');
+let dragging = false, dragStart = null, startObj = null, pinchStart = null, playing = false, playRAF = null;
+
+function save(){ localStorage.setItem('blendLabState', JSON.stringify(state)); }
+function labelFor(tool){
+  const map = {
+    beginner:{select:'選択',move:'移動',rotate:'回転',scale:'大きさ',extrude:'押し出し'},
+    blender:{select:'Select',move:'Move',rotate:'Rotate',scale:'Scale',extrude:'Extrude'}
+  }; return map[state.mode][tool];
+}
+function updateCube(){
+  const o=state.object;
+  const z = 1 + (o.extrude-1)*0.36;
+  cubeHolder.style.transform = `translate3d(${o.x*34}px, ${-o.y*34}px, 0) scale(${state.zoom})`;
+  cube.style.transform = `rotateX(${o.rx + state.viewRotX}deg) rotateY(${o.ry + state.viewRotY}deg) rotateZ(${o.rz}deg) scale3d(${o.scale},${o.scale*o.extrude},${o.scale*z})`;
+  cube.style.setProperty('--cube-color', o.color);
+  $('#objectShadow').style.transform = `translate(${o.x*34}px, ${-o.y*16}px) scale(${state.zoom*o.scale})`;
+  $('#px').value=o.x.toFixed(1); $('#py').value=o.y.toFixed(1); $('#rx').value=Math.round(o.rx); $('#ry').value=Math.round(o.ry); $('#sc').value=o.scale.toFixed(1);
+}
+function updateMode(){
+  $('#modeSwitch').classList.toggle('blender', state.mode==='blender');
+  $$('.tool b').forEach(b => b.textContent = b.dataset[state.mode]);
+  $('#gestureTip').textContent = state.tool==='select' ? '1本指で視点を回す · 2本指でズーム' : `${labelFor(state.tool)}モード · Cubeをドラッグ`;
+}
+function updateTool(){
+  $$('.tool').forEach(b => b.classList.toggle('active', b.dataset.tool===state.tool));
+  $('#gizmo').dataset.tool = state.tool;
+  $('#gestureTip').textContent = state.tool==='select' ? '1本指で視点を回す · 2本指でズーム' : `${labelFor(state.tool)}モード · Cubeをドラッグ`;
+}
+function setTab(name){
+  $$('.side-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+  $$('.side-content').forEach(c=>c.classList.remove('active'));
+  $('#'+name+'Tab').classList.add('active');
+}
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._to); t._to=setTimeout(()=>t.classList.remove('show'),1800); }
+
+function renderLessons(){
+  $('#lessonsTab').innerHTML = lessons.map((l,i)=>`<button class="lesson-mini ${i===state.lesson?'active':''} ${state.completed.includes(l.id)?'done':''}" data-lesson="${i}"><span>${l.n}</span><div><b>${l.title}</b><small>${l.time}</small></div><em>${state.completed.includes(l.id)?'✓':'→'}</em></button>`).join('');
+  $('#lessonGrid').innerHTML = lessons.map((l,i)=>`<button class="lesson-card ${i===state.lesson?'current':''} ${state.completed.includes(l.id)?'done':''}" data-lesson="${i}">
+      <div class="lesson-top"><span>${l.n}</span><em>${state.completed.includes(l.id)?'DONE':l.time}</em></div><h3>${l.title}</h3><p>${l.desc}</p><div class="lesson-bottom"><i></i><b>${state.completed.includes(l.id)?'もう一度':'はじめる'} →</b></div></button>`).join('');
+  $('#missionGrid').innerHTML = missions.map((m,i)=>`<button class="mission-card" data-mission="${i}"><span class="mission-icon">${m.icon}</span><em>${m.diff}</em><h3>${m.title}</h3><p>${m.desc}</p><b>TRY →</b></button>`).join('');
+  $$('.lesson-mini,.lesson-card').forEach(b=>b.onclick=()=>startLesson(+b.dataset.lesson));
+  $$('.mission-card').forEach(b=>b.onclick=()=>{ $('#courseOverlay').classList.add('hidden'); startLesson(6); toast(`${missions[+b.dataset.mission].title}ミッションを開始`); });
+  updateProgress();
+}
+function updateProgress(){
+  const pct = Math.round((state.completed.length/lessons.length)*100);
+  $('#totalProgress').textContent=pct+'%'; $('#totalBar').style.width=pct+'%';
+}
+function startLesson(i){
+  state.lesson=i; state.step=0; save();
+  $('#courseOverlay').classList.add('hidden'); coach.classList.remove('hidden');
+  renderLessons(); updateCoach();
+}
+function updateCoach(){
+  const l=lessons[state.lesson], st=l.steps[state.step];
+  $('#lessonNumber').textContent=`LESSON ${l.n}`; $('#lessonTitle').textContent=l.title;
+  $('#coachLesson').textContent=`LESSON ${l.n}`; $('#coachTitle').textContent=st[1]; $('#coachText').textContent=st[2];
+  $('#coachCount').textContent=`${state.step+1} / ${l.steps.length}`; $('#coachBar').style.width=`${((state.step+1)/l.steps.length)*100}%`;
+  $$('.is-target').forEach(x=>x.classList.remove('is-target'));
+  const target=$(`[data-target="${st[0]}"]`) || (st[0]==='key60'?$('#keyBtn'):null);
+  if(target) target.classList.add('is-target');
+  $('#coachNext').textContent = state.step===l.steps.length-1 ? 'レッスン完了 ✓' : 'できた / 次へ →';
+}
+function nextCoach(){
+  const l=lessons[state.lesson];
+  if(state.step < l.steps.length-1){ state.step++; save(); updateCoach(); }
+  else {
+    if(!state.completed.includes(l.id)) state.completed.push(l.id);
+    save(); renderLessons(); toast(`LESSON ${l.n} 完了！`);
+    if(state.lesson < lessons.length-1) { state.lesson++; state.step=0; updateCoach(); save(); }
+    else coach.classList.add('hidden');
+  }
+}
+
+function pointerPoint(e){ const p=e.touches?e.touches[0]:e; return {x:p.clientX,y:p.clientY}; }
+function distance(t){ const dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+function onDown(e){
+  if(e.touches?.length===2){ pinchStart={d:distance(e.touches),z:state.zoom}; return; }
+  const p=pointerPoint(e); dragging=true; dragStart=p; startObj=JSON.parse(JSON.stringify(state.object)); stage.classList.add('dragging');
+}
+function onMove(e){
+  if(e.touches?.length===2 && pinchStart){ e.preventDefault(); state.zoom=clamp(pinchStart.z*distance(e.touches)/pinchStart.d,.55,1.8); updateCube(); return; }
+  if(!dragging) return; e.preventDefault(); const p=pointerPoint(e), dx=p.x-dragStart.x,dy=p.y-dragStart.y;
+  if(state.tool==='select'){ state.viewRotY += dx*.28; state.viewRotX -= dy*.24; dragStart=p; }
+  if(state.tool==='move'){ state.object.x=startObj.x+dx/70; state.object.y=startObj.y-dy/70; }
+  if(state.tool==='rotate'){ state.object.ry=startObj.ry+dx*.55; state.object.rx=startObj.rx-dy*.55; }
+  if(state.tool==='scale'){ state.object.scale=clamp(startObj.scale-dy/130,.35,2.2); }
+  if(state.tool==='extrude'){ state.object.extrude=clamp(startObj.extrude-dy/120,.55,2.2); }
+  updateCube();
+}
+function onUp(){ if(dragging){dragging=false; stage.classList.remove('dragging'); save();} pinchStart=null; }
+stage.addEventListener('pointerdown',onDown); window.addEventListener('pointermove',onMove,{passive:false}); window.addEventListener('pointerup',onUp);
+stage.addEventListener('touchstart',e=>{ if(e.touches.length===2) onDown(e); },{passive:false}); stage.addEventListener('touchmove',e=>{ if(e.touches.length===2) onMove(e); },{passive:false}); stage.addEventListener('touchend',e=>{ if(pinchStart) onUp(e); });
+stage.addEventListener('wheel',e=>{e.preventDefault(); state.zoom=clamp(state.zoom-e.deltaY*.001,.55,1.8); updateCube();save();},{passive:false});
+
+$$('.tool').forEach(b=>b.onclick=()=>{state.tool=b.dataset.tool; updateTool(); save(); if(state.tool==='extrude'&&!state.editMode){state.editMode=true;$('#objectModeBtn').textContent='Edit Mode';$('#objectModeBtn').classList.add('edit');toast('Edit Mode に切り替えました');}});
+$('#modeSwitch').onclick=()=>{state.mode=state.mode==='beginner'?'blender':'beginner';updateMode();save();toast(state.mode==='beginner'?'初心者モード':'Blenderモード');};
+$('#objectModeBtn').onclick=()=>{state.editMode=!state.editMode;$('#objectModeBtn').textContent=state.editMode?'Edit Mode':'Object Mode';$('#objectModeBtn').classList.toggle('edit',state.editMode);save();toast(state.editMode?'Edit Mode':'Object Mode');};
+$$('.side-tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+$('#zoomIn').onclick=()=>{state.zoom=clamp(state.zoom+.12,.55,1.8);updateCube();save();};
+$('#zoomOut').onclick=()=>{state.zoom=clamp(state.zoom-.12,.55,1.8);updateCube();save();};
+$('#resetView').onclick=()=>{state.viewRotX=-12;state.viewRotY=26;state.zoom=1;updateCube();save();toast('視点をリセット');};
+$$('.swatches button').forEach(b=>b.onclick=()=>{state.object.color=b.dataset.color;$$('.swatches button').forEach(x=>x.classList.toggle('active',x===b));updateCube();save();toast('Materialを変更');});
+['px','py','rx','ry','sc'].forEach(id=>$('#'+id).addEventListener('change',()=>{state.object.x=+$('#px').value;state.object.y=+$('#py').value;state.object.rx=+$('#rx').value;state.object.ry=+$('#ry').value;state.object.scale=clamp(+$('#sc').value,.3,2.5);updateCube();save();}));
+
+function setFrame(v){ state.frame=clamp(Math.round(v),0,60); $('#frameSlider').value=state.frame; $('#frameReadout').textContent=state.frame; save(); }
+$('#frameSlider').oninput=e=>setFrame(+e.target.value);
+$('#jumpStart').onclick=()=>setFrame(0); $('#jumpEnd').onclick=()=>setFrame(60);
+$('#keyBtn').onclick=()=>{
+  const f=state.frame<30?0:60; setFrame(f); state.keys[f]=JSON.parse(JSON.stringify(state.object));
+  $('#keyDot'+f).classList.add('active'); save(); toast(`${f}F にキーフレームを保存`);
+};
+function stopPlay(){ playing=false; cancelAnimationFrame(playRAF); $('#playBtn').textContent='▶'; }
+$('#playBtn').onclick=()=>{
+  if(playing){stopPlay();return;} const a=state.keys[0],b=state.keys[60];
+  if(!a||!b){toast('0Fと60Fの両方にKEYを保存してください');return;}
+  playing=true;$('#playBtn').textContent='Ⅱ'; const start=performance.now();
+  const animate=(now)=>{ if(!playing)return; const t=clamp((now-start)/2200,0,1), ease=t*t*(3-2*t); setFrame(t*60);
+    ['x','y','rx','ry','rz','scale','extrude'].forEach(k=>state.object[k]=lerp(a[k],b[k],ease));
+    state.object.color=t<.5?a.color:b.color; updateCube();
+    if(t<1) playRAF=requestAnimationFrame(animate); else {stopPlay();toast('アニメーション再生完了');}
+  }; playRAF=requestAnimationFrame(animate);
+};
+
+$('#coachNext').onclick=nextCoach; $('#coachClose').onclick=()=>coach.classList.add('hidden');
+$('#helpBtn').onclick=()=>{coach.classList.remove('hidden');updateCoach();};
+$('#courseClose').onclick=()=>$('#courseOverlay').classList.add('hidden');
+$('[data-action="home"]').onclick=()=>{$('#courseOverlay').classList.remove('hidden');renderLessons();};
+$$('.mobile-nav button').forEach(b=>b.onclick=()=>{
+  $$('.mobile-nav button').forEach(x=>x.classList.toggle('active',x===b));
+  if(b.dataset.mobile==='lessons') $('#courseOverlay').classList.remove('hidden');
+  if(b.dataset.mobile==='props'){setTab('properties');$('#sidePanel').classList.add('mobile-open');}
+  if(b.dataset.mobile==='sim') $('#sidePanel').classList.remove('mobile-open');
+});
+$('#sceneWrap').addEventListener('click',()=>{ if(window.innerWidth<760) $('#sidePanel').classList.remove('mobile-open'); });
+
+// Tutorial target interactions may advance when the intended action is performed.
+function maybeAdvance(target){ const l=lessons[state.lesson],st=l?.steps[state.step]; if(st && st[0]===target) setTimeout(nextCoach,220); }
+$('#viewportPanel').addEventListener('click',e=>{ if(e.target.closest('.tool,.zoom-controls,.viewport-toolbar'))return; maybeAdvance('viewport'); });
+$('.tree-row.active').onclick=()=>{toast('Cubeを選択');maybeAdvance('outliner');};
+$('[data-tab="properties"]').addEventListener('click',()=>maybeAdvance('properties'));
+$('#timeline').addEventListener('click',()=>maybeAdvance('timeline'));
+stage.addEventListener('pointerup',()=>{ if(state.tool==='select')maybeAdvance('orbit'); if(state.tool==='move')maybeAdvance('moveAction'); if(state.tool==='rotate')maybeAdvance('rotateAction'); if(state.tool==='scale')maybeAdvance('scaleAction'); if(state.tool==='extrude')maybeAdvance('extrudeAction'); });
+$$('.tool').forEach(b=>b.addEventListener('click',()=>maybeAdvance(b.dataset.tool)));
+$('#objectModeBtn').addEventListener('click',()=>{if(state.editMode)maybeAdvance('edit')});
+$$('.swatches button').forEach(b=>b.addEventListener('click',()=>maybeAdvance('material')));
+$('#frameSlider').addEventListener('change',()=>{if(state.frame===0)maybeAdvance('frame0'); if(state.frame===60)maybeAdvance('frame60');});
+$('#keyBtn').addEventListener('click',()=>maybeAdvance(state.frame===0?'key0':'key60'));
+$('#playBtn').addEventListener('click',()=>maybeAdvance('play'));
+
+window.addEventListener('keydown',e=>{
+  const map={g:'move',r:'rotate',s:'scale',e:'extrude'}; if(map[e.key.toLowerCase()]){state.tool=map[e.key.toLowerCase()];updateTool();save();toast(`${labelFor(state.tool)} (${e.key.toUpperCase()})`);}
+});
+
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+
+// Restore UI
+if(state.keys[0]) $('#keyDot0').classList.add('active'); if(state.keys[60]) $('#keyDot60').classList.add('active');
+$('#objectModeBtn').textContent=state.editMode?'Edit Mode':'Object Mode';$('#objectModeBtn').classList.toggle('edit',state.editMode);
+$$('.swatches button').forEach(b=>b.classList.toggle('active',b.dataset.color===state.object.color));
+renderLessons(); updateMode(); updateTool(); updateCube(); setFrame(state.frame); updateCoach();
+
+// First visit: show course briefly? Keep simulator immediately usable, coach on.
+if(!localStorage.getItem('blendLabVisited')){ localStorage.setItem('blendLabVisited','1'); setTimeout(()=>toast('Cubeを指で触ってみよう'),500); }
+
+    </script>
+  </body>
+</html>
